@@ -1,40 +1,34 @@
 {% extends "site_base.html" %}
 
+{% load i18n %}
+{% load ifsetting_tag %}
 {% load webdesign %}
 {% load biblion_tags %}
 
+{% block head_title %}{% trans "Welcome" %}{% endblock %}
+
 {% block body_id %}homepage{% endblock %}
 
-{% block content %}
+{% block body %}
     
-{% latest_blog_post as latest_post %}
-    <div class="announcement"><b><a href="{% url blog %}">ACME Blog</a></b>{% if latest_post %} &mdash; <a href="{{ latest_post.get_absolute_url }}">{{ latest_post.title }}</a>{% endif %}</div>
+    <h1>{% trans "Welcome to OpenScriptures" %}</h1>
     
-    <div class="grouping clear">
-        <div class="primary">
-            <h2>Primary Section Heading</h2>
-            <p>{% lorem %}</p>
-        </div>
-        
-        <div class="secondary">
-            <h2>Secondary Section Heading</h2>
-            <p>{% lorem %}</p>
-        </div>
-    </div>
+    {% lorem 3 p %}
     
-    <div class="grouping clear">
-        <div class="primary">
-            <h2>Primary Section Heading</h2>
-            <p>{% lorem %}</p>
-        </div>
-        
-        <div class="secondary">
-            <h2>Secondary Section Heading</h2>
-            <p>{% lorem %}</p>
-        </div>
-    </div>
+    {% latest_blog_post as latest_post %}
+    <div><b><a href="{% url blog %}">OpenScriptures Blog</a></b>{% if latest_post %} &mdash; <a href="{{ latest_post.get_absolute_url }}">{{ latest_post.title }}</a>{% endif %}</div>
     
-{% endblock %}
-
-{% block extra_body %}
+    <hr />
+    {% if user.is_authenticated %}
+        {% url what_next as what_next_url %}
+        <p class="what_next">{% blocktrans %}Wondering <a href="{{ what_next_url }}">What Next</a>?{% endblocktrans %}</p>
+    {% else %}
+        {% url acct_login as login_url %}
+        {% ifsetting ACCOUNT_OPEN_SIGNUP %}
+            {% url acct_signup as signup_url %}
+            <p>{% blocktrans %}You can <a href="{{ signup_url }}">Sign up</a> and <a href="{{ login_url }}">Log in</a> to try out the site.{% endblocktrans %}</p>
+        {% else %}
+            <p>{% blocktrans %}You can <a href="{{ login_url }}">Log in</a> to try out the site.{% endblocktrans %}</p>
+        {% endifsetting %}
+    {% endif %}
 {% endblock %}

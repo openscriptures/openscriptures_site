@@ -1,26 +1,39 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <title>{% block head_title %}ACME, Inc.{% endblock %}</title>
-    <link rel="stylesheet" href="{{ MEDIA_URL }}css/base.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="{{ MEDIA_URL }}css/syntax.css" type="text/css" media="screen" />
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load account_tags %}
+{% load openid_tags %}
+{% load ifsetting_tag %}
+
+{% block extra_head_base %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/site_tabs.css" />
     
     <link rel="alternate" type="application/atom+xml" href="{% url blog_feed "technical" %}" title="technical blog feed"/>
     <link rel="alternate" type="application/atom+xml" href="{% url blog_feed "business" %}" title="business blog feed"/>
     <link rel="alternate" type="application/atom+xml" href="{% url blog_feed_combined %}" title="combined blog feed"/>
-  </head>
-  <body id="{% block body_id %}default{% endblock %}">
-    <div id="wrapper">
-        {% block header %}
-            <h1 id="logo">ACME, Inc.</h1>
-        {% endblock %}
-        
-        <div id="content">
-            {% block content %}
-            {% endblock %}
-        </div><!-- End content -->
-    </div>
-    {# @@@ google analytics #}
-    {% block extra_body %}{% endblock %}
-  </body>
-</html>
+    
+    {% block extra_head %}{% endblock %}
+{% endblock %}
+
+{% block login %}
+    {% if user.is_authenticated %}
+        {% openid_icon openid user %}<b>{% user_display user %}</b> | <a href="{% url acct_email %}">{% trans "Account" %}</a> | {% if user.is_staff %}<a href="/admin/">{% trans "Admin" %}</a> | {% endif %}<a href="/openid/logout/?next={% url acct_logout %}">{% trans "Logout" %}</a>
+    {% else %}
+        <a href="{% url acct_login %}">{% trans "Login" %}</a> {% ifsetting ACCOUNT_OPEN_SIGNUP %}{% trans "or" %} <a href="{% url acct_signup %}"><b>{% trans "Sign up" %}</b></a>{% endifsetting %}
+    {% endif %}
+{% endblock %}
+
+{% block logo_link_image %}<a href="{% url home %}"><img src="{{ STATIC_URL }}pinax/images/logo.png" alt="Pinax"/></a>{% endblock %}
+
+{% block right_tabs %}
+    {% if user.is_authenticated %}
+        <ul class="tabs">{% spaceless %}
+            <li id="tab_profile"><a href="{% url profile_detail user %}">{% trans "Profile" %}</a></li>
+            <li id="tab_notices"><a href="{% url notification_notices %}">{% trans "Notices" %}{% if notice_unseen_count %} ({{ notice_unseen_count }}){% endif %}</a></li>
+        {% endspaceless %}</ul>
+    {% endif %}
+{% endblock %}
+
+{% block footer %}
+<div class="legal">Footer goes here</div>
+{% endblock %}

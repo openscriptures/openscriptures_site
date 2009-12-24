@@ -87,13 +87,19 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_openid.consumer.SessionConsumer',
+    'account.middleware.LocaleMiddleware',
     'django.middleware.doc.XViewMiddleware',
+    'pagination.middleware.PaginationMiddleware',
+    'pinax.middleware.security.HideSensistiveFieldsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'openscriptures_site.urls'
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), "templates"),
+    os.path.join(PROJECT_ROOT, "templates"),
+    os.path.join(PINAX_ROOT, "templates", PINAX_THEME),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -102,6 +108,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.request",
+    
+    "pinax.core.context_processors.pinax_settings",
+    
+    "notification.context_processors.notification",
+    "announcements.context_processors.site_wide_announcements",
+    "account.context_processors.openid",
+    "account.context_processors.account",
 )
 
 INSTALLED_APPS = (
@@ -114,8 +127,23 @@ INSTALLED_APPS = (
     'django.contrib.webdesign',
     
     # pinax
+    'pinax.templatetags',
+    'notification',
     'staticfiles',
     'biblion',
+    'account',
+    'signup_codes',
+    'django_openid',
+    'emailconfirmation',
+    'mailer',
+    'announcements',
+    'pagination',
+    'timezones',
+    'ajax_validation',
+    'uni_form',
+    'debug_toolbar',
+    
+    'basic_profiles',
     
     # local
     
@@ -124,9 +152,27 @@ INSTALLED_APPS = (
 
 )
 
+CONTACT_EMAIL = "feedback@example.com"
+SITE_NAME = "OpenScriptures"
+
+ACCOUNT_OPEN_SIGNUP = True
+ACCOUNT_REQUIRED_EMAIL = False
+ACCOUNT_EMAIL_VERIFICATION = False
+
+LOGIN_URL = "/account/login/"
+LOGIN_REDIRECT_URLNAME = "home"
+
+ABSOLUTE_URL_OVERRIDES = {
+    "auth.user": lambda o: "/profiles/profile/%s/" % o.username,
+}
+AUTH_PROFILE_MODULE = 'basic_profiles.Profile'
+NOTIFICATION_LANGUAGE_MODULE = 'account.Account'
+
 #TWITTER_USERNAME = ""
 #TWITTER_PASSWORD = ""
 #TWITTER_TWEET_PREFIX = "New Post:" # NOTE: space will be appended
+
+
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
