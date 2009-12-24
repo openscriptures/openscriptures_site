@@ -91,6 +91,7 @@ MIDDLEWARE_CLASSES = (
     'account.middleware.LocaleMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'pagination.middleware.PaginationMiddleware',
+    'django_sorting.middleware.SortingMiddleware',
     'pinax.middleware.security.HideSensistiveFieldsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
@@ -145,7 +146,22 @@ INSTALLED_APPS = (
     
     'basic_profiles',
     
+    'projects',
+    'django_sorting',
+    'topics',
+    'avatar',
+    'threadedcomments',
+    'threadedcomments_extras',
+    'groups',
+    'wiki',
+    'tagging',
+    'tagging_utils',
+    'tasks',
+    'django_markup',
+    'attachments',
+    
     # local
+    'tag_app', # @@@
     
     # admin
     'django.contrib.admin',
@@ -171,6 +187,15 @@ NOTIFICATION_LANGUAGE_MODULE = 'account.Account'
 #TWITTER_USERNAME = ""
 #TWITTER_PASSWORD = ""
 #TWITTER_TWEET_PREFIX = "New Post:" # NOTE: space will be appended
+
+MARKUP_FILTER_FALLBACK = 'creole'
+MARKUP_CHOICES = (
+    ('restructuredtext', u'reStructuredText'),
+    ('textile', u'Textile'),
+    ('markdown', u'Markdown'),
+    ('creole', u'Creole'),
+)
+WIKI_MARKUP_CHOICES = MARKUP_CHOICES
 
 
 

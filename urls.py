@@ -38,6 +38,12 @@ urlpatterns = patterns('',
     
     (r'^profiles/', include('basic_profiles.urls')),
     
+    (r'^projects/', include('projects.urls')),
+    (r'^tagging_utils/', include('tagging_utils.urls')),
+    (r'^comments/', include('threadedcomments.urls')),
+    (r'^avatar/', include('avatar.urls')),
+    (r'^attachments/', include('attachments.urls')),
+    
     url(r'^admin/(.*)', admin.site.root),
 )
 

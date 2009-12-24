@@ -7,6 +7,8 @@
 
 {% block extra_head_base %}
     <link rel="stylesheet" href="{{ STATIC_URL }}css/site_tabs.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}tasks/css/tasks.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}pinax/css/groups.css" />
     
     <link rel="alternate" type="application/atom+xml" href="{% url blog_feed "technical" %}" title="technical blog feed"/>
     <link rel="alternate" type="application/atom+xml" href="{% url blog_feed "business" %}" title="business blog feed"/>
@@ -29,6 +31,7 @@
     {% if user.is_authenticated %}
         <ul class="tabs">{% spaceless %}
             <li id="tab_profile"><a href="{% url profile_detail user %}">{% trans "Profile" %}</a></li>
+            <li id="tab_projects"><a href="{% url project_list %}">{% trans "Projects" %}</a></li>
             <li id="tab_notices"><a href="{% url notification_notices %}">{% trans "Notices" %}{% if notice_unseen_count %} ({{ notice_unseen_count }}){% endif %}</a></li>
         {% endspaceless %}</ul>
     {% endif %}
@@ -37,3 +40,9 @@
 {% block footer %}
 <div class="legal">Footer goes here</div>
 {% endblock %}
+
+{% block extra_body_base %}
+    <script src="{{ STATIC_URL }}tasks/js/tasks.js" type="text/javascript"></script>
+    {% block extra_body %}{% endblock %}
+{% endblock %}
+
