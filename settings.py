@@ -49,12 +49,11 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-
-MEDIA_ROOT = os.path.join(os.path.dirname(__file__), "site_media")
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'site_media', 'media')
 
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
-MEDIA_URL = '/site_media/'
+MEDIA_URL = '/site_media/media/'
 
 # Absolute path to the directory that holds static files like app media.
 # Example: "/home/media/media.lawrence.com/apps/"
@@ -66,7 +65,7 @@ STATIC_URL = '/site_media/static/'
 
 # Additional directories which hold static files
 STATICFILES_DIRS = (
-    ('cms_project_company', os.path.join(PROJECT_ROOT, 'media')),
+    ('openscriptures_site', os.path.join(PROJECT_ROOT, 'media')),
     ('pinax', os.path.join(PINAX_ROOT, 'media', PINAX_THEME)),
 )
 
