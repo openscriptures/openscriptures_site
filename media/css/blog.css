@@ -1,0 +1,80 @@
+.clear:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.main {
+    float: left;
+    width: 540px;
+    margin-left: 10px;
+}
+.main h2 {
+    font-size: 2em;
+    line-height: 1em;
+    padding: 0;
+}
+a.post-link {
+    color: #000;
+}
+a.post-link:hover {
+    color: #666;
+}
+.main p {
+    font-size: 1em;
+    line-height: 1.5em;
+    margin: 1em 0 0 0;
+    padding: 0;
+}
+.main li {
+    font-size: 1em;
+    line-height: 1.5em;
+    margin: 0.5em;
+}
+
+.main .teaser {
+    font-size: 1.1em;
+    margin: 30px 0;
+}
+.main .teaser p {
+}
+.main p.more {
+    margin: 0 2em;
+    padding: 0;
+    text-align: right;
+}
+.secondary {
+    float: left;
+    width: 200px;
+    margin-left: 40px;
+}
+.post_footer h2 {
+    font-size: 14pt;
+    line-height: 18pt;
+    margin: 1em 0 0;
+}
+
+.post_footer p {
+    margin: 0;
+    font-size: 10pt;
+    line-height: 14pt;
+}
+
+p.post_dateline .date {
+    font-size: 14pt;
+}
+
+.post_footer p.post_dateline .date {
+    font-size: 12pt;
+}
+
+p.post_dateline .author {
+}
+
+p.post_dateline a {
+}
+
+p.post_dateline a:hover {
+}
