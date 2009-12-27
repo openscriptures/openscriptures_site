@@ -94,9 +94,22 @@
                     {% else %}
                         <p>You are member of this project.</p>
                     {% endifequal %}
-                {% else %}
-                    <p>It is up to the creator of this project (<a href="{% url profile_detail project.creator.username %}">{% user_display project.creator %}</a>) to add you.</p>
                 {% endif %}
+            </div>
+            <div>
+                <form method="POST" action="">
+                    {% if is_member %}
+                        {% ifequal user project.creator %}
+                            <p>{% trans "You are the creator of this project so can't leave (yet)." %}</p>
+                        {% else %}
+                            <input type="hidden" name="action" value="leave" />
+                            <input type="submit" value="{% trans "leave" %}"/>
+                        {% endifequal %}
+                    {% else %}
+                        <input type="hidden" name="action" value="join" />
+                        <input type="submit" value="{% trans "join project" %}"/>
+                    {% endif %}
+                </form>
             </div>
         {% endif %}
         

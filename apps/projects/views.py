@@ -130,6 +130,30 @@ def project(request, group_slug=None, form_class=ProjectUpdateForm, adduser_form
             adduser_form = adduser_form_class(project=project) # clear form
     else:
         adduser_form = adduser_form_class(project=project)
+    if action == "join":
+        if not is_member:
+            project_member = ProjectMember(project=project, user=request.user)
+            project.members.add(project_member)
+            project_member.save()
+            request.user.message_set.create(
+                message=_("You have joined the project %(project_name)s") % {"project_name": project.name})
+            is_member = True
+            if notification:
+                pass # @@@ no notification on joining yet
+        else:
+            request.user.message_set.create(
+                message=_("You have already joined project %(project_name)s") % {"project_name": project.name})
+    if action == "leave":
+        if is_member:
+            project_member = ProjectMember.objects.get(project=project, user=request.user)
+            project_member.delete()
+            request.user.message_set.create(message="You have left the project %(project_name)s" % {"project_name": project.name})
+            is_member = False
+            if notification:
+                pass # @@@ no notification on departure yet
+        else:
+            request.user.message_set.create(
+                message=_("You are not a member of project %(project_name)s") % {"project_name": project.name})
     
     return render_to_response(template_name, {
         "project_form": project_form,
