@@ -160,6 +160,8 @@ INSTALLED_APPS = (
     'django_markup',
     'attachments',
     
+    'interest_groups',
+    
     # local
     'tag_app', # @@@
     

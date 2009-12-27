@@ -1,0 +1,4 @@
+{% load i18n %}{% blocktrans with interest_group.get_absolute_url as interest_group_url %}A new interest group {{ interest_group }} has been created.
+
+http://{{ current_site }}{{ interest_group_url }}
+{% endblocktrans %}

@@ -44,6 +44,8 @@ urlpatterns = patterns('',
     (r'^avatar/', include('avatar.urls')),
     (r'^attachments/', include('attachments.urls')),
     
+    (r'^interest_groups/', include('interest_groups.urls')),
+    
     url(r'^admin/(.*)', admin.site.root),
 )
 

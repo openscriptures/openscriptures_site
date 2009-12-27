@@ -1,0 +1,4 @@
+{% load i18n %}{% load account_tags %}{% user_display user as user_display %}{% blocktrans with interest_group.get_absolute_url as interest_group_url %}{{ user_display }} has joined the interest group {{ interest_group }}.
+
+http://{{ current_site }}{{ interest_group_url }}
+{% endblocktrans %}

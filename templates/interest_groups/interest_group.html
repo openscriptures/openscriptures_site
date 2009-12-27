@@ -1,0 +1,157 @@
+{% extends "interest_groups/base.html" %}
+
+{% load i18n %}
+{% load account_tags %}
+{% load uni_form %}
+{% load wiki_tags %}
+{% load avatar_tags %}
+{% load threadedcommentstags %}
+{% load pagination_tags %}
+{% load extra_tagging_tags %}
+{% load interest_groups_tags %}
+{% load group_tags %}
+{% load topics_tags %}
+{% load theme_tags %}
+
+{% block head_title %}{{ interest_group.name }}{% endblock %}
+
+{% block body %}
+    
+    {% if user.is_authenticated %}
+        <div class="right_panel">
+            <div class="members">
+                <h2>{% trans "Members" %}</h2>
+                <table width="100%">
+                    {% for member in interest_group.members.all %}
+                        {% if forloop.counter0|divisibleby:"3" %}<tr>{% endif %}
+                        <td>
+                            <div class="avatar">{% avatar member 40 %}</div>
+                            <div class="details"><a href="{% url profile_detail member.username %}" title="{{ member.username }}">{% user_display member %}</a></div>
+                        </td>
+                        {% if forloop.counter0|add:"1"|divisibleby:"3" %}</tr>{% endif %}
+                    {% endfor %}
+                    {% if interest_group.members.all|length|divisibleby:"3" %}{% else %}</tr>{% endif %}
+                </table>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div style="width: 550px;">
+        
+        <h1>{% trans "Interest Group" %} {{ interest_group.name }}</h1>
+        
+        <p>
+            {% trans "Slug:" %} <tt>{{ interest_group.slug }}</tt><br />
+            {% trans "Creator:" %} <a href="{% url profile_detail interest_group.creator.username %}">{% user_display interest_group.creator %}</a><br />
+            {% trans "Created:" %} {{ interest_group.created|date }}
+            <br />
+            {% show_tags_for interest_group %}
+        </p>
+        
+        <p>{{ interest_group.description }}</p>
+        
+        {% ifequal user interest_group.creator %}
+            <div class="form-toggle">
+                <p><span id="edit-interest-group-toggle">{% trans "Edit details" %}</span></p>
+                
+                <form class="uniForm" id="edit-interest-group" method="POST" action="">
+                    <fieldset class="inlineLabels">
+                        {{ interest_group_form|as_uni_form }}
+                        <div class="form_block">
+                            <input type="hidden" name="action" value="update" />
+                            <input type="submit" value="{% trans "updated" %}"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            
+            {% ifequal interest_group.members.all.count 1 %}
+                <p>{% silk "delete" %} <a href="#" onclick="$('#delete_interest_group_form').toggle(); return false;">{% trans "Delete interest group" %}</a><p>
+                 <form class="delete_form" id="delete_interest_group_form" action="{% url interest_group_delete interest_group.slug %}" method="POST" style="display: none;">
+                     <input type="submit" value="{% trans "Delete Interest Group" %}" /> (all content will be removed)
+                </form>
+            {% else %}
+                <p>{% trans "You are not the only member of the interest group so you can't delete the interest group." %}</p>
+            {% endifequal %}
+            
+        {% endifequal %}
+        
+        {% if user.is_authenticated %}
+            <div>
+                <form method="POST" action="">
+                    {% if is_member %}
+                        {% ifequal user interest_group.creator %}
+                            <p>{% trans "You are the creator of this interest group so can't leave (yet)." %}</p>
+                        {% else %}
+                            <input type="hidden" name="action" value="leave" />
+                            <input type="submit" value="{% trans "leave" %}"/>
+                        {% endifequal %}
+                    {% else %}
+                        <input type="hidden" name="action" value="join" />
+                        <input type="submit" value="{% trans "join interest group" %}"/>
+                    {% endif %}
+                </form>
+            </div>
+        {% else %}
+            {% url acct_signup as signup_url %}
+            {% url acct_login as login_url %}
+            <p>{% blocktrans %}<a href="{{ signup_url }}">Sign up</a> and <a href="{{ login_url }}">log in </a> to join this interest group.{% endblocktrans %}</p>
+        {% endif %}
+        
+        
+        {% if user.is_authenticated %}
+            <h2>{% trans "Discussion Topics" %}{% if interest_group.topics.all.count %} ({{ interest_group.topics.all.count }}){% endif %}</h2>
+            
+            {% get_topics_for_group interest_group as topic_queryset %}
+            {% with topic_queryset|slice:":5" as topics %}
+                {% if topics %}
+                    {% for topic in topics|slice:":5" %}
+                        {% show_topic topic %}
+                    {% endfor %}
+                    <p><a href="{% groupurl topic_list interest_group %}">{% trans "more..." %}</a></p>
+                {% else %}
+                    {% groupurl topic_list interest_group as new_topic_url %}
+                    <p>{% blocktrans %}None yet. <a href="{{ new_topic_url }}">Start one...</a>{% endblocktrans %}</p>
+                {% endif %}
+            {% endwith %}
+            
+            {% content_objects interest_group "wiki.Article" as articles %}
+            <h2>{% trans "Wiki Articles" %}{% if articles %} ({{ articles|length }}){% endif %}</h2>
+            
+            {% if articles %}
+                <table class="topics">
+                    {% for article in articles %}
+                        {% show_teaser article %}
+                    {% endfor %}
+                </table>
+                <p><a href="{% groupurl wiki_list interest_group %}">{% trans "more..." %}</a></p>
+            {% else %}
+                {% groupurl wiki_list interest_group as wiki_url %}
+                <p>
+                    {% blocktrans %}
+                        None yet. Go to the <a href="{{ wiki_url }}" title="wiki">wiki</a> to start a new article.
+                    {% endblocktrans %}
+                </p>
+            {% endif %}
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block extra_body %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#edit-interest-group').hide();
+            $('#edit-interest-group-toggle').click(function() {
+                $('#edit-interest-group').toggle();
+                $('#edit-interest-group').autoscroll();
+                return false;
+            });
+            if ($('#edit-interest-group .error').length) {
+                $('#edit-interest-group').show();
+                $('#edit-interest-group .error').autoscroll();
+            }
+        });
+    </script>
+    
+{% endblock %}

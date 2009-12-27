@@ -1,0 +1,25 @@
+{% extends "interest_groups/base.html" %}
+
+{% load i18n %}
+{% load pagination_tags %}
+{% load interest_groups_tags %}
+
+{% block head_title %}{% trans "Your Interest Groups" %}{% endblock %}
+
+{% block body %}
+    
+    <h1>{% trans "Your Interest Groups" %}</h1>
+    
+    <p>{% trans "These are the interest groups you participate in." %}</p>
+        
+    {% autopaginate interest_groups %}
+    
+    <dl>
+        {% for interest_group in interest_groups %}
+            {% show_interest_group interest_group %}
+        {% endfor %}
+    </dl>
+    
+    {% paginate %}
+    
+{% endblock %}

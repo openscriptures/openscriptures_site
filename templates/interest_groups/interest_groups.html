@@ -1,0 +1,50 @@
+{% extends "interest_groups/base.html" %}
+
+{% load i18n %}
+{% load uni_form %}
+{% load humanize %}
+{% load pagination_tags %}
+{% load order_by %}
+{% load extra_tagging_tags %}
+{% load interest_groups_tags %}
+{% load sorting_tags %}
+
+{% block head_title %}{% blocktrans %}Interest Groups{% endblocktrans %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Interest Groups" %}</h1>
+    
+    <p>{% trans "An <b>interest group</b> is a group of people with some common interest." %}</p>
+    {% if user.is_authenticated %}
+        <p><a href="{% url interest_group_create %}">Create</a> your own interest group.</p>
+    {% else %}
+        {% url acct_signup as signup_url %}
+        {% url acct_login as login_url %}
+        <p>{% blocktrans %}<a href="{{ signup_url }}">Sign up</a> and <a href="{{ login_url }}">log in </a> to create your own interest_group or join an existing one.{% endblocktrans %}</p>
+    {% endif %}
+    
+    <form method="GET" action="">
+        <input type="text" name="search" value="{{ search_terms }}" />
+        <input type="submit" value="Search" />
+        {% if search_terms %}
+            <a href="{% clear_search_url request %}">Clear Search Terms</a>
+        {% endif %}
+    </form>
+    {% autosort interest_groups %}
+    {% autopaginate interest_groups 10 %}
+    {% if interest_groups %}
+        <p>{% trans "Order by:" %}
+            {% anchor topic_count Topics %}
+            {% anchor member_count Members %}
+            {% anchor name Name %}
+            {% anchor created Date %}
+        </p>
+        <dl>
+        {% for interest_group in interest_groups %}
+            {% show_interest_group interest_group %}
+        {% endfor %}
+        </dl>
+        {% paginate %}
+    {% endif %}
+    
+{% endblock %}

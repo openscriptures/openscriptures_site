@@ -1,0 +1,2 @@
+{% load i18n %}{% url profile_detail username=user.username as user_url %}{% load account_tags %}{% user_display user as user_display %}
+{% blocktrans with interest_group.get_absolute_url as interest_group_url %}<a href="{{ user_url }}">{{ user_display }}</a> has joined the interest group <a href="{{ interest_group_url }}">{{ interest_group }}</a>.{% endblocktrans %}
