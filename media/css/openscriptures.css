@@ -1,0 +1,39 @@
+#tabhead {
+    background: #222;
+    border-bottom: 1px solid #000; /* tab border */
+    position: relative;
+}
+#tabhead .logo {
+    height: 90px;
+    padding-left: 20px;
+    padding-top: 10px;
+}
+#tabhead .logo img {
+    width: 109px;
+    height: 79px;
+    vertical-align: middle;
+}
+
+#tabhead h1 {
+    font-size: 32pt;
+}
+
+#tabhead h1 a {
+    text-decoration: none;
+    color: #FFF;
+}
+#tabhead h1 a:hover {
+    color: #CCC;
+}
+
+#tabhead .login {
+    color: #EEE;
+}
+#tabhead .login a, #tabhead .login a:visited {
+    color: #DDD;
+}
+
+#subnav {
+    background: #EEE;
+    border-bottom: 1px solid #999;
+}

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/site_tabs.css" />
     <link rel="stylesheet" href="{{ STATIC_URL }}tasks/css/tasks.css" />
     <link rel="stylesheet" href="{{ STATIC_URL }}pinax/css/groups.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/openscriptures.css" />
     
     <link rel="alternate" type="application/atom+xml" href="{% url blog_feed "technical" %}" title="technical blog feed"/>
     <link rel="alternate" type="application/atom+xml" href="{% url blog_feed "business" %}" title="business blog feed"/>
@@ -25,7 +26,14 @@
     {% endif %}
 {% endblock %}
 
-{% block logo_link_image %}<a href="{% url home %}"><img src="{{ STATIC_URL }}pinax/images/logo.png" alt="Pinax"/></a>{% endblock %}
+{% block logo_link_image %}
+    <h1>
+        <a href="{% url home %}">
+            <img src="{{ STATIC_URL }}images/logo.png" alt="logo"/>
+            Open Scriptures
+        </a>
+    </h1>
+{% endblock %}
 
 {% block right_tabs %}
     {% if user.is_authenticated %}
