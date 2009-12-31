@@ -170,12 +170,14 @@ INSTALLED_APPS = (
 
 )
 
-CONTACT_EMAIL = "feedback@example.com"
+CONTACT_EMAIL = "jtauber@jtauber.com"
 SITE_NAME = "OpenScriptures"
 
 ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_REQUIRED_EMAIL = False
 ACCOUNT_EMAIL_VERIFICATION = False
+
+EMAIL_CONFIRMATION_DAYS = 2
 
 LOGIN_URL = "/account/login/"
 LOGIN_REDIRECT_URLNAME = "home"
